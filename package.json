@@ -1,0 +1,23 @@
+{
+  "name": "gulp-increment-version",
+  "version": "1.0.0",
+  "description": "Increment version in package.json with option to also increment tag in .yml file and in git.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nadeem Ramsing",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.0",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-bump": "^2.8.0",
+    "gulp-json-editor": "^2.2.1",
+    "gulp-json-to-yaml": "0.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-tag-version": "^1.3.0",
+    "jsonfile": "^4.0.0",
+    "path": "^0.12.7"
+  }
+}
