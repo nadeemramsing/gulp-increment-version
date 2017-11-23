@@ -36,10 +36,10 @@ function use(gulp_) {
 }
 
 function config(options_) {
-    if (Object.keys(options).length !== 0) {
+    if (Object.keys(options_).length !== 0)
         options = Object.assign(options, options_);
-        handleOptions(options);
-    }
+
+    handleOptions(options);
 
     configured = true;
 }
