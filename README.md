@@ -21,3 +21,13 @@ increment.config({
     type: patch | minor | major | prerelease
 });
 ``
+
+**TODO**
+1. Automatise the distribution flow entirely:
+    - Discard all changes? (app.constant.js etc?) or Stash all changes!
+    - Stage everything and commit
+    - Check out dev
+    - Push local dev to remote dev
+    - Merge dev into master
+    - Push local master to remote master
+
