@@ -1,11 +1,11 @@
 **Usage**
 
 ``
-var gulpIncrement = require('gulp-increment-version');
+var increment = require('gulp-increment-version');
 ``
 
 ``
-gulp.task('increment-version', gulpIncrement.task);
+gulp.task('increment-version', increment.task);
 ``
 
 **What it does**
@@ -17,9 +17,7 @@ gulp.task('increment-version', gulpIncrement.task);
 **Configuration**
 
 ``
-gulpIncrement.config({
-    ``
+increment.config({
     type: patch | minor | major | prerelease
-    ``
 });
 ``
