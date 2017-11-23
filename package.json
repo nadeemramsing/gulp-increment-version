@@ -21,5 +21,16 @@
     "gulp-yaml": "^1.0.1",
     "jsonfile": "^4.0.0",
     "path": "^0.12.7"
+  },
+  "bugs": {
+    "url": "https://github.com/nadeemramsing/gulp-increment-version/issues"
+  },
+  "files": [
+    "index.js"
+  ],
+  "homepage": "https://github.com/nadeemramsing/gulp-increment-version",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nadeemramsing/gulp-increment-version.git"
   }
 }
