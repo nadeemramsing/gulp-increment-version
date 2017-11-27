@@ -160,7 +160,7 @@ function git(cb) {
 }
 
 function pushTag(cb) {
-    return git_.push('origin', 'v' + version, function (err) {
+    return git_.push('origin', options['use-v-prefix'] ? 'v' + version : version, function (err) {
         if (err)
             console.error(err);
     });
