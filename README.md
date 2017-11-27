@@ -16,11 +16,15 @@ gulp.task('increment-version', increment.task);
 
 **Configuration**
 
-``
+```
 increment.config({
-    type: patch | minor | major | prerelease
+
+    'type': patch | minor | major | prerelease (default = patch),
+
+    'use-v-prefix': true | false (default = true)
+
 });
-``
+```
 
 **TODO**
 1. Automatise the distribution flow entirely:
