@@ -1,25 +1,25 @@
-var gulp = require('gulp'),
+var
     async = require('async'),
-    path = require('path'),
-
-    tag = require('gulp-tag-version'),
-
     bump_ = require('gulp-bump'),
+    del = require('del'),
     git_ = require('gulp-git'),
-    yamlToJson_ = require('gulp-yaml'),
-    jsonToYaml_ = require('gulp-json-to-yaml'),
-
-    jsonfile = require('jsonfile'),
+    gulp = require('gulp'),
+    gulpif = require('gulp-if'),
     jeditor = require('gulp-json-editor'),
+    jsonToYaml_ = require('gulp-json-to-yaml'),
+    jsonfile = require('jsonfile'),
+    path = require('path'),
     rename = require('gulp-rename'),
-    del = require('del');
+    tag = require('gulp-tag-version'),
+    yamlToJson_ = require('gulp-yaml');
 
 var options = {
-    packageFilename: 'package.json',
-    droneYmlFilename: '.drone.yml',
-    droneJsonFilename: '.drone.json',
-    src: upPath(''),
-    type: 'patch'
+    'droneJsonFilename': '.drone.json',
+    'droneYmlFilename': '.drone.yml',
+    'packageFilename': 'package.json',
+    'src': upPath(''),
+    'type': 'patch',
+    'use-v-prefix': true
 },
     version = '',
     configured = false;
@@ -100,11 +100,16 @@ function parallelGitDrone(cb) {
 }
 
 function incrementGit(cb) {
-    return gulp
-        .src([options.packagePath])
-        .pipe(tag())
-        .on('err', cb)
-        .on('end', cb);
+
+    if (options['use-v-prefix'] === false)
+
+        return gulp
+            .src([options.packagePath])
+            .pipe(gulpif(options['use-v-prefix'], tag(), tag({
+                prefix: ''
+            })))
+            .on('err', cb)
+            .on('end', cb);
 }
 
 function incrementDrone(cb) {
