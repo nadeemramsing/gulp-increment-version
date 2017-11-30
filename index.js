@@ -1,25 +1,28 @@
-var gulp = require('gulp'),
+var
     async = require('async'),
-    path = require('path'),
-
-    tag = require('gulp-tag-version'),
-
     bump_ = require('gulp-bump'),
+    del = require('del'),
     git_ = require('gulp-git'),
-    yamlToJson_ = require('gulp-yaml'),
-    jsonToYaml_ = require('gulp-json-to-yaml'),
-
-    jsonfile = require('jsonfile'),
+    gulp = require('gulp'),
+    gulpif = require('gulp-if'),
     jeditor = require('gulp-json-editor'),
+    jsonToYaml_ = require('gulp-json-to-yaml'),
+    jsonfile = require('jsonfile'),
+    path = require('path'),
     rename = require('gulp-rename'),
-    del = require('del');
+    tag = require('gulp-tag-version'),
+    wait = require('gulp-wait');
+yamlToJson_ = require('gulp-yaml');
 
 var options = {
-    packageFilename: 'package.json',
-    droneYmlFilename: '.drone.yml',
-    droneJsonFilename: '.drone.json',
-    src: upPath(''),
-    type: 'patch'
+    'droneJsonFilename': '.drone.json',
+    'droneYmlFilename': '.drone.yml',
+    'packageFilename': 'package.json',
+    'src': upPath(''),
+    'type': 'patch',
+    'use-v-prefix': true,
+    'push-tag': true,
+    'wait-before-push': 1000
 },
     version = '',
     configured = false;
@@ -65,15 +68,7 @@ function task(cb) {
         incrementGit,
         git
     ],
-        function (err) {
-            if (err)
-                console.error(err);
-
-            if (cb)
-                cb(err);
-
-            return;
-        });
+        cb);
 }
 
 function bump(cb) {
@@ -98,7 +93,10 @@ function saveVersion(cb) {
 function incrementGit(cb) {
     return gulp
         .src([options.packagePath])
-        .pipe(tag())
+        .pipe(gulpif(options['use-v-prefix'], tag(), tag({
+            prefix: ''
+        })))
+        .pipe(wait(options['wait-before-push']))
         .on('err', cb)
         .on('end', cb);
 }
@@ -156,5 +154,8 @@ function git(cb) {
 }
 
 function pushTag(cb) {
-    return git_.push('origin', 'v' + version, cb)
+    if (options['push-tag'])
+        return git_.push('origin', options['use-v-prefix'] ? 'v' + version : version, cb);
+    else
+        cb();
 }
