@@ -11,8 +11,8 @@ var
     path = require('path'),
     rename = require('gulp-rename'),
     tag = require('gulp-tag-version'),
-    wait = require('gulp-wait');
-yamlToJson_ = require('gulp-yaml');
+    wait = require('gulp-wait'),
+    yamlToJson_ = require('gulp-yaml');
 
 var options = {
     'droneJsonFilename': '.drone.json',
