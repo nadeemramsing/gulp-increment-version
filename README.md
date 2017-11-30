@@ -21,7 +21,11 @@ increment.config({
 
     'type': patch | minor | major | prerelease (default = patch),
 
-    'use-v-prefix': true | false (default = true)
+    'use-v-prefix': true | false (default = true),
+
+    'push-tag': true | false (default = true),
+
+    'wait-before-push': <time before pushing tag / ms> (default = 1000)
 
 });
 ```
