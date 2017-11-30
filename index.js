@@ -1,25 +1,25 @@
-var
+var gulp = require('gulp'),
     async = require('async'),
-    bump_ = require('gulp-bump'),
-    del = require('del'),
-    git_ = require('gulp-git'),
-    gulp = require('gulp'),
-    gulpif = require('gulp-if'),
-    jeditor = require('gulp-json-editor'),
-    jsonToYaml_ = require('gulp-json-to-yaml'),
-    jsonfile = require('jsonfile'),
     path = require('path'),
-    rename = require('gulp-rename'),
+
     tag = require('gulp-tag-version'),
-    yamlToJson_ = require('gulp-yaml');
+
+    bump_ = require('gulp-bump'),
+    git_ = require('gulp-git'),
+    yamlToJson_ = require('gulp-yaml'),
+    jsonToYaml_ = require('gulp-json-to-yaml'),
+
+    jsonfile = require('jsonfile'),
+    jeditor = require('gulp-json-editor'),
+    rename = require('gulp-rename'),
+    del = require('del');
 
 var options = {
-    'droneJsonFilename': '.drone.json',
-    'droneYmlFilename': '.drone.yml',
-    'packageFilename': 'package.json',
-    'src': upPath(''),
-    'type': 'patch',
-    'use-v-prefix': true
+    packageFilename: 'package.json',
+    droneYmlFilename: '.drone.yml',
+    droneJsonFilename: '.drone.json',
+    src: upPath(''),
+    type: 'patch'
 },
     version = '',
     configured = false;
@@ -61,7 +61,8 @@ function task(cb) {
     return async.waterfall([
         bump,
         saveVersion,
-        parallelGitDrone,
+        incrementDrone,
+        incrementGit,
         git
     ],
         function (err) {
@@ -70,6 +71,8 @@ function task(cb) {
 
             if (cb)
                 cb(err);
+
+            return;
         });
 }
 
@@ -92,24 +95,12 @@ function saveVersion(cb) {
     });
 }
 
-function parallelGitDrone(cb) {
-    return async.parallel([
-        incrementGit,
-        incrementDrone
-    ], cb);
-}
-
 function incrementGit(cb) {
-
-    if (options['use-v-prefix'] === false)
-
-        return gulp
-            .src([options.packagePath])
-            .pipe(gulpif(options['use-v-prefix'], tag(), tag({
-                prefix: ''
-            })))
-            .on('err', cb)
-            .on('end', cb);
+    return gulp
+        .src([options.packagePath])
+        .pipe(tag())
+        .on('err', cb)
+        .on('end', cb);
 }
 
 function incrementDrone(cb) {
@@ -165,8 +156,5 @@ function git(cb) {
 }
 
 function pushTag(cb) {
-    return git_.push('origin', options['use-v-prefix'] ? 'v' + version : version, function (err) {
-        if (err)
-            console.error(err);
-    });
+    return git_.push('origin', 'v' + version, cb)
 }
