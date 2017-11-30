@@ -1,6 +1,6 @@
 {
   "name": "gulp-increment-version",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Increment version in package.json with option to also increment tag in .yml file and in git.",
   "main": "index.js",
   "scripts": {
