@@ -1,4 +1,5 @@
 var
+    _ = require('lodash'),
     async = require('async'),
     bump_ = require('gulp-bump'),
     del = require('del'),
@@ -39,6 +40,11 @@ function use(gulp_) {
 }
 
 function config(options_) {
+    if (typeof options_ === 'object')
+        options_ = _.pickBy(options_, function (v) {
+            return !_.isNil(v);
+        });
+
     if (Object.keys(options_).length !== 0)
         options = Object.assign(options, options_);
 
