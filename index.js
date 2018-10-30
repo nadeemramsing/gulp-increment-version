@@ -16,7 +16,7 @@ var
     yamlToJson_ = require('gulp-yaml');
 
 var options = {
-    'jsonFilename': '.drone.json',
+    'jsonFilename': '.tmp.json',
     'packageFilename': 'package.json',
     'ymlFilename': '.drone.yml',
     'ymlVersionPath': 'pipeline.publish.tag',
@@ -56,8 +56,8 @@ function config(options_) {
 
 function handleOptions(options) {
     options.packagePath = upPath(options.packageFilename);
-    options.droneYmlPath = upPath(options.ymlFilename);
-    options.droneJsonPath = upPath(options.jsonFilename);
+    options.ymlPath = upPath(options.ymlFilename);
+    options.jsonPath = upPath(options.jsonFilename);
 }
 
 function upPath(str) {
@@ -119,7 +119,7 @@ function incrementDrone(cb) {
 
 function yamlToJson(cb) {
     return gulp
-        .src(options.droneYmlPath)
+        .src(options.ymlPath)
         .pipe(yamlToJson_({ safe: true }))
         .pipe(gulp.dest(options.src))
         .on('err', cb)
@@ -128,7 +128,7 @@ function yamlToJson(cb) {
 
 function editJson(cb) {
     return gulp
-        .src(options.droneJsonPath)
+        .src(options.jsonPath)
         .pipe(jeditor(function (obj) {
             _.set(obj, options.ymlVersionPath, version);
             return obj;
@@ -140,7 +140,7 @@ function editJson(cb) {
 
 function jsonToYaml(cb) {
     return gulp
-        .src(options.droneJsonPath)
+        .src(options.jsonPath)
         .pipe(jsonToYaml_({ safe: true }))
         .pipe(rename(options.ymlFilename))
         .pipe(gulp.dest(options.src))
@@ -149,7 +149,7 @@ function jsonToYaml(cb) {
 }
 
 function deleteJson(cb) {
-    return del([options.droneJsonPath])
+    return del([options.jsonPath])
         .then(function () { cb() })
         .catch(function (err) { if (err) cb(err) })
 }
