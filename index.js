@@ -16,9 +16,10 @@ var
     yamlToJson_ = require('gulp-yaml');
 
 var options = {
-    'droneJsonFilename': '.drone.json',
-    'droneYmlFilename': '.drone.yml',
+    'jsonFilename': '.drone.json',
     'packageFilename': 'package.json',
+    'ymlFilename': '.drone.yml',
+    'ymlVersionPath': 'pipeline.publish.tag',
     'src': upPath(''),
     'type': 'patch',
     'use-v-prefix': true,
@@ -46,7 +47,7 @@ function config(options_) {
         });
 
     if (Object.keys(options_).length !== 0)
-        options = Object.assign(options, options_);
+        Object.assign(options, options_);
 
     handleOptions(options);
 
@@ -55,8 +56,8 @@ function config(options_) {
 
 function handleOptions(options) {
     options.packagePath = upPath(options.packageFilename);
-    options.droneYmlPath = upPath(options.droneYmlFilename);
-    options.droneJsonPath = upPath(options.droneJsonFilename);
+    options.droneYmlPath = upPath(options.ymlFilename);
+    options.droneJsonPath = upPath(options.jsonFilename);
 }
 
 function upPath(str) {
@@ -129,7 +130,7 @@ function editJson(cb) {
     return gulp
         .src(options.droneJsonPath)
         .pipe(jeditor(function (obj) {
-            obj.pipeline.publish.tag = [version, 'latest'];
+            _.set(obj, options.ymlVersionPath, version);
             return obj;
         }))
         .pipe(gulp.dest(options.src))
@@ -141,7 +142,7 @@ function jsonToYaml(cb) {
     return gulp
         .src(options.droneJsonPath)
         .pipe(jsonToYaml_({ safe: true }))
-        .pipe(rename(options.droneYmlFilename))
+        .pipe(rename(options.ymlFilename))
         .pipe(gulp.dest(options.src))
         .on('err', cb)
         .on('end', cb);
