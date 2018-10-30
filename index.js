@@ -16,7 +16,6 @@ var
     yamlToJson_ = require('gulp-yaml');
 
 var options = {
-    'jsonFilename': '.tmp.json',
     'packageFilename': 'package.json',
     'ymlFilename': '.drone.yml',
     'ymlVersionPath': 'pipeline.publish.tag',
@@ -55,6 +54,8 @@ function config(options_) {
 }
 
 function handleOptions(options) {
+    options.jsonFilename = options.ymlFilename.substr(0, options.ymlFilename.lastIndexOf('.')) + '.json';
+
     options.packagePath = upPath(options.packageFilename);
     options.ymlPath = upPath(options.ymlFilename);
     options.jsonPath = upPath(options.jsonFilename);
